@@ -1,0 +1,121 @@
+name: CICD Pipeline (Local)
+
+#
+# This is a repository specific local workflow - only the template is auto-generated
+#
+
+#
+# Start of Template (part 1)
+#
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+env:
+  SLACK_NOTIFY: true
+
+jobs:
+#
+# End of Template (part 1)
+#
+
+  bandit:
+    runs-on: ubuntu-latest
+    name: Bandit
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run Bandit
+        env:
+          EXCLUDE_FILES: '\.md$'
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/bandit/master/pipeline.sh)
+
+  pydocstyle:
+    runs-on: ubuntu-latest
+    name: Pydocstyle
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run Pydocstyle
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pydocstyle/master/pipeline.sh)
+
+  pycodestyle:
+    runs-on: ubuntu-latest
+    name: Pycodestyle
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run Pycodestyle
+        env:
+          EXCLUDE_FILES: '\.md$'
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pycodestyle/master/pipeline.sh)
+
+  pylama:
+    runs-on: ubuntu-latest
+    name: Pylama
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run Pylama
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylama/master/pipeline.sh)
+
+  pylint:
+    runs-on: ubuntu-latest
+    name: Pylint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run Pylint
+        env:
+          EXCLUDE_FILES: '\.md$,setup.py'
+        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylint/master/pipeline.sh)
+
+#
+# Start of Template (part 2)
+#
+
+  slack-workflow-status:
+    if: always()
+    name: Slack Post Workflow Notification
+    needs:
+      - bandit
+      - pydocstyle
+      - pycodestyle
+      - pylint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Workflow Notifications
+        if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
+        uses: Gamesight/slack-workflow-status@v1.1.0
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          include_jobs: on-failure
+          include_commit_message: true
+#
+# End of Template (part 2)
+#

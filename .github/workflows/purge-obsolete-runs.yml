@@ -1,0 +1,35 @@
+name: Purge obsolete workflow runs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '31 2 * * 1'
+
+env:
+  SLACK_NOTIFY: false
+
+jobs:
+  purge-obsolete-workflows:
+    name: Purge obsolete workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge obsolete workflow runs
+        uses: otto-contentfactory/purge-workflow-runs@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  slack-workflow-status:
+    if: always()
+    name: Slack Post Workflow Notification
+    needs:
+      - purge-obsolete-workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Workflow Notifications
+        if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
+        uses: Gamesight/slack-workflow-status@v1.1.0
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          include_jobs: on-failure
+          include_commit_message: true

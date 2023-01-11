@@ -117,7 +117,7 @@ def test_process_command_line_arguments() -> None:
 
     This is the extended summary from the template and needs to be replaced.
     """
-    testargs: list[str] = ["prog", "-r", "required parameter"]
+    testargs: list[str] = ["prog", "-r", "required parameter"]  # pylint: disable=unsubscriptable-object
     with patch.object(sys, 'argv', testargs):
         assert isinstance(process_command_line_arguments(), Namespace)  # nosec: assert_used
 

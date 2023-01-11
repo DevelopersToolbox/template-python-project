@@ -32,8 +32,8 @@ jobs:
       - uses: snok/latest-python-versions@v1
         id: get-python-versions-action
         with:
-          min-version: 3.8
-          include-prereleases: true
+          min-version: 3.7
+          include-prereleases: false
 
   bandit:
     name: Bandit

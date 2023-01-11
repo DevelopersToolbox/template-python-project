@@ -25,7 +25,7 @@ from modules.globals import global_configuration
 from modules.notify import error, error_msg, info, info_msg, success, success_msg, system, system_msg, warn, warn_msg
 
 
-def output_errors(errors: list, header="\nErrors occurred:\n") -> str:
+def output_errors(errors: list) -> str:
     """Define a summary.
 
     This is the extended summary from the template and needs to be replaced.
@@ -36,9 +36,9 @@ def output_errors(errors: list, header="\nErrors occurred:\n") -> str:
     Returns:
         str -- _description_
     """
-    error_string: str = header
+    error_string: str = "\n"
     for err in errors:
-        error_string += f"  {err}\n"
+        error_string += f"{err}\n"
     return error_string
 
 

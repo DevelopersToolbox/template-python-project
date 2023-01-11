@@ -23,72 +23,103 @@ jobs:
 #
 # End of Template (part 1)
 #
+  get-python-versions:
+    name: Get Python Versions
+    runs-on: ubuntu-latest
+    outputs:
+      python-matrix: ${{ steps.get-python-versions-action.outputs.latest-python-versions }}
+    steps:
+      - uses: snok/latest-python-versions@v1
+        id: get-python-versions-action
+        with:
+          min-version: 3.8
+          include-prereleases: true
 
   bandit:
-    runs-on: ubuntu-latest
     name: Bandit
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
       - name: Run Bandit
         env:
           EXCLUDE_FILES: '\.md$'
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/bandit/master/pipeline.sh)
 
   pydocstyle:
-    runs-on: ubuntu-latest
     name: Pydocstyle
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
       - name: Run Pydocstyle
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pydocstyle/master/pipeline.sh)
 
   pycodestyle:
-    runs-on: ubuntu-latest
     name: Pycodestyle
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
       - name: Run Pycodestyle
         env:
           EXCLUDE_FILES: '\.md$'
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pycodestyle/master/pipeline.sh)
 
   pylama:
-    runs-on: ubuntu-latest
     name: Pylama
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
       - name: Run Pylama
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylama/master/pipeline.sh)
 
   pylint:
-    runs-on: ubuntu-latest
     name: Pylint
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
       - name: Run Pylint
         env:
           EXCLUDE_FILES: '\.md$,setup.py'

@@ -115,7 +115,8 @@ jobs:
       matrix:
         python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout the repository
+        uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -133,17 +134,18 @@ jobs:
       matrix:
         python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout the repository
+        uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-     - name: Install required packages
+      - name: Install required packages
         run: |
           pip install -r requirements.txt
       - name: Run Pytest
         run: |
-          pytest --no-header -vv
+         pytest --no-header -vv
 
 #
 # Start of Template (part 2)
@@ -157,6 +159,7 @@ jobs:
       - pydocstyle
       - pycodestyle
       - pylint
+      - pytest
     runs-on: ubuntu-latest
     steps:
       - name: Slack Workflow Notifications

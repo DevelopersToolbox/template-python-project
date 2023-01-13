@@ -3,14 +3,14 @@
         <img src="https://cdn.wolfsoftware.com/assets/images/github/organisations/offsectoolbox/black-and-white-circle-256.png" alt="OffSecToolbox logo" />
     </a>
     <br />
-    <a href="https://github.com/OffSecToolbox/baseline-project/actions/workflows/cicd-pipeline-local.yml">
-        <img src="https://img.shields.io/github/actions/workflow/status/offsectoolbox/baseline-project/cicd-pipeline-local.yml?branch=master&label=local%20pipeline&style=for-the-badge" alt="Github Build Status" />
+    <a href="https://github.com/OffSecToolbox/baseline-project/actions/workflows/cicd-pipeline.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/offsectoolbox/baseline-project/cicd-pipeline.yml?branch=master&label=CICD%20pipeline&style=for-the-badge" alt="Github Build Status" />
     </a>
-    <a href="https://github.com/OffSecToolbox/baseline-project/actions/workflows/cicd-pipeline-shared.yml">
-        <img src="https://img.shields.io/github/actions/workflow/status/offsectoolbox/baseline-project/cicd-pipeline-shared.yml?branch=master&label=shared%20pipeline&style=for-the-badge" alt="Github Build Status" />
+    <a href="https://github.com/OffSecToolbox/baseline-project/releases/latest">
+        <img src="https://img.shields.io/github/v/release/OffSecToolbox/baseline-project?color=blue&label=Latest%20Release&style=for-the-badge" alt="Release">
     </a>
-    <a href="https://codecov.io/gh/OffSecToolbox/baseline-project">
-        <img src="https://img.shields.io/codecov/c/gh/OffSecToolbox/baseline-project?label=code%20coverage&style=for-the-badge" alt="code coverage" />
+    <a href="https://github.com/OffSecToolbox/baseline-project/releases/latest">
+        <img src="https://img.shields.io/github/commits-since/OffSecToolbox/baseline-project/latest.svg?color=blue&style=for-the-badge" alt="Commits since release">
     </a>
     <br />
     <a href="https://github.com/OffSecToolbox/baseline-project/blob/master/.github/CODE_OF_CONDUCT.md">

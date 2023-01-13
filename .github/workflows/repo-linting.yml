@@ -1,8 +1,4 @@
-name: CICD Pipeline (Shared)
-
-#
-# This is a shared workflow used by ALL projects and is auto-generated.
-#
+name: Repository Linting
 
 on:
   push:

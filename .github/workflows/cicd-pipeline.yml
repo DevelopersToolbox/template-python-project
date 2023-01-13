@@ -1,4 +1,4 @@
-name: CICD Pipeline (Local)
+name: CICD Pipeline
 
 #
 # This is a repository specific local workflow - only the template is auto-generated

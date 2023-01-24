@@ -12,8 +12,31 @@ env:
   SLACK_NOTIFY: true
 
 jobs:
+  get-go-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
+    steps:
+    - uses: ActionsToolbox/get-language-versions-action@master
+      id: get-language-versions
+      with:
+        language: "go"
+        highest-only: true
+
+  get-ruby-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
+    steps:
+    - uses: ActionsToolbox/get-language-versions-action@master
+      id: get-language-versions
+      with:
+        language: "ruby"
+        highest-only: true
+
   actionlint:
     name: Action Lint
+    needs: get-go-versions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -21,12 +44,13 @@ jobs:
       - name: Setup Go 1.19
         uses: actions/setup-go@v3
         with:
-          go-version: '1.19'
+          go-version: ${{ needs.get-go-versions.outputs.version }}
       - name: Run Action Lint
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/action-lint/master/pipeline.sh)
 
   awesomebot:
     name: Awesomebot
+    needs: get-ruby-versions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -34,7 +58,7 @@ jobs:
       - name: Set up Ruby 3.1
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: ${{ needs.get-ruby-versions.outputs.version }}
       - name: Run Awesomebot
         env:
           FLAGS: "default"

@@ -87,7 +87,7 @@ jobs:
       - name: Setup node ${{ needs.get-node-version.outputs.version }}
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c  # v3.6.0
         with:
-          node-version: $${{ needs.get-node-version.outputs.version }}
+          node-version: ${{ needs.get-node-version.outputs.version }}
       - name: Run Markdown Lint
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/markdown-lint/master/pipeline.sh)
         env:
@@ -111,7 +111,7 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c  # 3.3.0
-      - name: Set up Python ${{ needs.get-pytho-version.outputs.version }}
+      - name: Set up Python ${{ needs.get-python-version.outputs.version }}
         uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435  # v4.5.0
         with:
           python-version: ${{ needs.get-python-version.outputs.version }}

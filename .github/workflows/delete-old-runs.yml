@@ -11,6 +11,38 @@ on:
         description: 'The minimum runs to keep for each workflow.'
         required: true
         default: '6'
+      delete_workflow_pattern:
+        description: 'The name or filename of the workflow. if not set then it will target all workflows.'
+        required: false
+        default: "All"
+      delete_workflow_by_state_pattern:
+        description: 'Remove workflow by state: active, deleted, disabled_fork, disabled_inactivity, disabled_manually'
+        required: true
+        default: "All"
+        type: choice
+        options:
+          - "All"
+          - active
+          - deleted
+          - disabled_inactivity
+          - disabled_manually
+      delete_run_by_conclusion_pattern:
+        description: 'Remove workflow by conclusion: action_required, cancelled, failure, skipped, success'
+        required: true
+        default: "All"
+        type: choice
+        options:
+          - "All"
+          - action_required
+          - cancelled
+          - failure
+          - skipped
+          - success
+      dry_run:
+        description: 'Only log actions, do not perform any delete operations.'
+        required: false
+        default: false
+
   schedule:
     - cron: '48 4 * * *'
 
@@ -24,6 +56,8 @@ jobs:
   delete-old-workflows:
     name: Delete old workflow runs
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Set the variables
         env:
@@ -39,6 +73,10 @@ jobs:
           repository: ${{ github.repository }}
           retain_days: ${{ env.DAYS }}
           keep_minimum_runs: ${{ env.MINIMUM_RUNS }}
+          delete_workflow_pattern: ${{ github.event.inputs.delete_workflow_pattern }}
+          delete_workflow_by_state_pattern: ${{ github.event.inputs.delete_workflow_by_state_pattern }}
+          delete_run_by_conclusion_pattern: ${{ github.event.inputs.delete_run_by_conclusion_pattern }}
+          dry_run: ${{ github.event.inputs.dry_run }}
 
   slack-workflow-status:
     if: always()
@@ -52,6 +90,7 @@ jobs:
         uses: Gamesight/slack-workflow-status@v1.2.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           include_jobs: on-failure
           include_commit_message: true

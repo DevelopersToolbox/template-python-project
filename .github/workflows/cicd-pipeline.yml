@@ -19,6 +19,9 @@ on:
 env:
   SLACK_NOTIFY: true
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
 #
 # End of Template (part 1)

@@ -11,6 +11,9 @@ on:
 env:
   SLACK_NOTIFY: true
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   get-go-version:
     runs-on: ubuntu-latest

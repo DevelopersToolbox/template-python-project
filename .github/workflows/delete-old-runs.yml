@@ -17,6 +17,9 @@ on:
 env:
   SLACK_NOTIFY: false
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   delete-old-workflows:
     name: Delete old workflow runs

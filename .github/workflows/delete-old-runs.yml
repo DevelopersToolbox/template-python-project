@@ -38,10 +38,6 @@ on:
           - failure
           - skipped
           - success
-      dry_run:
-        description: 'Only log actions, do not perform any delete operations.'
-        required: false
-        default: false
 
   schedule:
     - cron: '48 4 * * *'
@@ -76,7 +72,6 @@ jobs:
           delete_workflow_pattern: ${{ github.event.inputs.delete_workflow_pattern }}
           delete_workflow_by_state_pattern: ${{ github.event.inputs.delete_workflow_by_state_pattern }}
           delete_run_by_conclusion_pattern: ${{ github.event.inputs.delete_run_by_conclusion_pattern }}
-          dry_run: ${{ github.event.inputs.dry_run }}
 
   slack-workflow-status:
     if: always()

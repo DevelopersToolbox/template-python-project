@@ -17,7 +17,7 @@ jobs:
     outputs:
       version: ${{ steps.get-language-versions.outputs.latest-versions }}
     steps:
-    - uses: ActionsToolbox/get-language-versions-action@12914a8  # v0.1.0
+    - uses: ActionsToolbox/get-language-versions-action@12914a844dfb5bfa53884aaa1f736f961325f113  # v0.1.0
       id: get-language-versions
       with:
         language: "go"
@@ -28,7 +28,7 @@ jobs:
     outputs:
       version: ${{ steps.get-language-versions.outputs.latest-versions }}
     steps:
-    - uses: ActionsToolbox/get-language-versions-action@12914a8  # v0.1.0
+    - uses: ActionsToolbox/get-language-versions-action@12914a844dfb5bfa53884aaa1f736f961325f113  # v0.1.0
       id: get-language-versions
       with:
         language: "ruby"

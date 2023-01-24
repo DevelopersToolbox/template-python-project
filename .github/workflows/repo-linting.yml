@@ -15,9 +15,9 @@ jobs:
   get-go-versions:
     runs-on: ubuntu-latest
     outputs:
-      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
+      version: ${{ steps.get-language-versions.outputs.latest-versions }}
     steps:
-    - uses: ActionsToolbox/get-language-versions-action@master
+    - uses: ActionsToolbox/get-language-versions-action@v0.1.0
       id: get-language-versions
       with:
         language: "go"
@@ -26,9 +26,9 @@ jobs:
   get-ruby-versions:
     runs-on: ubuntu-latest
     outputs:
-      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
+      version: ${{ steps.get-language-versions.outputs.latest-versions }}
     steps:
-    - uses: ActionsToolbox/get-language-versions-action@master
+    - uses: ActionsToolbox/get-language-versions-action@v0.1.0
       id: get-language-versions
       with:
         language: "ruby"

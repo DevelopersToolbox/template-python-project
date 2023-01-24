@@ -8,14 +8,16 @@ on:
 env:
   SLACK_NOTIFY: false
 
-permissions:
-  issues: write
-  pull-requests: write
+# Declare default permissions as read only.
+permissions: read-all
 
 jobs:
   handle-stale-entries:
     name: Handle stale Issues & PRs
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: Handle state Issues & PRs
         uses: actions/stale@v6

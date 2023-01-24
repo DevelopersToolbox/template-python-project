@@ -8,6 +8,9 @@ on:
 env:
   SLACK_NOTIFY: false
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   purge-obsolete-workflows:
     name: Purge obsolete workflow runs

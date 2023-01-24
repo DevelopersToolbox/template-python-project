@@ -9,13 +9,15 @@ on:
 env:
   SLACK_NOTIFY: false
 
-permissions:
-  contents: write
+# Declare default permissions as read only.
+permissions: read-all
 
 jobs:
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3

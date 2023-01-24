@@ -1,13 +1,16 @@
 name: Dependabot pull request approve and merge
 on: pull_request_target
 
-permissions:
-  pull-requests: write
-  contents: write
+# Declare default permissions as read only.
+permissions: read-all
 
 jobs:
   dependabot:
     name: Dependabot
+    permissions:
+      pull-requests: write
+      contents: write
+
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:

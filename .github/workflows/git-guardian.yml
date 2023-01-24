@@ -5,6 +5,9 @@ on: [push, pull_request]
 env:
   SLACK_NOTIFY: false
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   scanning:
     name: GitGuardian scan

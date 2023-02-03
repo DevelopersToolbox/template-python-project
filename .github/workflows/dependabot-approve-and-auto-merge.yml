@@ -8,8 +8,11 @@ jobs:
   dependabot:
     name: Dependabot
     permissions:
-      pull-requests: write
+      actions: write
       contents: write
+      issues: write
+      pull-requests: write
+      repository-projects: write
 
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}

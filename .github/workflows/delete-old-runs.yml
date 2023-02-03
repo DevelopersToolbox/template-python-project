@@ -63,7 +63,7 @@ jobs:
           echo "DAYS=${{ github.event.inputs.days || env.DEFAULT_DAYS }}" >> "${GITHUB_ENV}"
           echo "MINIMUM_RUNS=${{ github.event.inputs.minimum_runs || env.DEFAULT_MINIMUM_RUNS }}" >> "${GITHUB_ENV}"
       - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
+        uses: Mattraks/delete-workflow-runs@c1a2f0de3fa4134a2357de83c92acff6e298bb8a # v2.0.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
@@ -82,7 +82,7 @@ jobs:
     steps:
       - name: Slack Workflow Notifications
         if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
-        uses: Gamesight/slack-workflow-status@v1.2.0
+        uses: Gamesight/slack-workflow-status@26a36836c887f260477432e4314ec3490a84f309 # v1.2.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 

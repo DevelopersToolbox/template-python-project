@@ -30,13 +30,12 @@ jobs:
     name: Get Python Versions
     runs-on: ubuntu-latest
     outputs:
-      python-matrix: ${{ steps.get-python-versions-action.outputs.latest-python-versions }}
+      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
     steps:
-      - uses: snok/latest-python-versions@v1
-        id: get-python-versions-action
-        with:
-          min-version: 3.7
-          include-prereleases: false
+    - uses: ActionsToolbox/get-language-versions-action@12914a844dfb5bfa53884aaa1f736f961325f113  # v0.1.0
+      id: get-language-versions
+      with:
+        language: "python"
 
   bandit:
     name: Bandit
@@ -44,14 +43,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Run Bandit
         env:
           EXCLUDE_FILES: '\.md$'
@@ -63,14 +62,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Run Pydocstyle
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pydocstyle/master/pipeline.sh)
 
@@ -80,14 +79,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Run Pycodestyle
         env:
           EXCLUDE_FILES: '\.md$'
@@ -99,14 +98,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Run Pylama
         run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylama/master/pipeline.sh)
 
@@ -116,14 +115,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Run Pylint
         env:
           EXCLUDE_FILES: '\.md$,setup.py'
@@ -135,14 +134,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{ fromJson(needs.get-python-versions.outputs.python-matrix) }}
+        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-versions }}
       - name: Install required packages
         run: |
           pip install -r requirements.txt
@@ -167,7 +166,7 @@ jobs:
     steps:
       - name: Slack Workflow Notifications
         if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
-        uses: Gamesight/slack-workflow-status@v1.2.0
+        uses: Gamesight/slack-workflow-status@26a36836c887f260477432e4314ec3490a84f309 # v1.2.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -20,7 +20,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Handle state Issues & PRs
-        uses: actions/stale@v6
+        uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7.0.0
         id: stale
         with:
           stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Slack Workflow Notifications
         if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
-        uses: Gamesight/slack-workflow-status@v1.2.0
+        uses: Gamesight/slack-workflow-status@26a36836c887f260477432e4314ec3490a84f309 # v1.2.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

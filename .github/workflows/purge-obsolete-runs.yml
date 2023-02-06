@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Purge obsolete workflow runs
-        uses: otto-contentfactory/purge-workflow-runs@98a5c7d3a3b2910e21c402967cb7d360c9e4669d # v1.1.1
+        uses: otto-de/purge-workflow-runs@0de33de0a9fe17321e4cf3c21dcbc0445e7c5b61 # v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

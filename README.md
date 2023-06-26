@@ -1,10 +1,11 @@
+<!-- markdownlint-disable -->
 <p align="center">
     <a href="https://github.com/OffSecToolbox/">
         <img src="https://cdn.wolfsoftware.com/assets/images/github/organisations/offsectoolbox/black-and-white-circle-256.png" alt="OffSecToolbox logo" />
     </a>
     <br />
     <a href="https://github.com/OffSecToolbox/baseline-project/actions/workflows/cicd-pipeline.yml">
-        <img src="https://img.shields.io/github/actions/workflow/status/offsectoolbox/baseline-project/cicd-pipeline.yml?branch=master&label=CICD%20pipeline&style=for-the-badge" alt="Github Build Status" />
+        <img src="https://img.shields.io/github/actions/workflow/status/OffSecToolbox/baseline-project/cicd-pipeline.yml?branch=master&label=cicd%20pipeline&style=for-the-badge" alt="Github Build Status" />
     </a>
     <a href="https://github.com/OffSecToolbox/baseline-project/releases/latest">
         <img src="https://img.shields.io/github/v/release/OffSecToolbox/baseline-project?color=blue&label=Latest%20Release&style=for-the-badge" alt="Release">
@@ -43,5 +44,6 @@ Base functionality:
 
 We decided to make this available along with our other tools to allow people to use a well engineered starting point when creating their own tools.
 
+
 <br />
-<p align="right"><a href="https://wolfsoftware.com/"><img src="https://img.shields.io/badge/Created%20by%20Wolf%20Software-blue?style=for-the-badge" /></a></p>
+<p align="right"><a href="https://wolfsoftware.com/"><img src="https://img.shields.io/badge/Created%20by%20Wolf%20on%20behalf%20of%20Wolf%20Software-blue?style=for-the-badge" /></a></p>

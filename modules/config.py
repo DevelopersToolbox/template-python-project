@@ -22,4 +22,5 @@ def create_configuration_from_arguments(args: Namespace) -> None:
     global_configuration.verbose = args.verbose
     global_configuration.debug = args.debug
     global_configuration.required = args.required
-    global_configuration.optional = args.optional
+    global_configuration.optional_integer = args.optional_integer
+    global_configuration.optional_string = args.optional_string

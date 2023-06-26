@@ -31,7 +31,7 @@ When a security report is received, we will carry out the following steps:
 * Prepare fixes for all releases still under maintenance. These fixes will be
   released as fast as possible.
 
-We will endeavor to keep you informed of the progress towards a fix and full
+We will endeavour to keep you informed of the progress towards a fix and full
 announcement, and may ask for additional information or guidance.
 
 ## Comments on this Policy

@@ -1,4 +1,4 @@
-name: Stale issue/pr handler
+name: Purge obsolete workflow runs
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
           - 'false'
 
   schedule:
-    - cron: '55 3 * * *'
+    - cron: '4 3 * * 1'
 
 env:
   SLACK_NOTIFY: false
@@ -21,12 +21,13 @@ env:
 permissions: read-all
 
 jobs:
-  handle-stale-entries:
-    name: Handle stale Issues & PRs (Local)
+  purge-deprecated-workflow-runs:
+    name: Purge deprecated workflow runs (Local)
     permissions:
-      issues: write
-      pull-requests: write
-    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-handle-stale.yml@master
+      actions: write
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-purge-deprecated-workflow-runs.yml@master
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   set-slack-notify:
     name: Set Slack Notify
@@ -43,7 +44,7 @@ jobs:
     if: always()
     name: Slack (Local)
     needs:
-      - handle-stale-entries
+      - purge-deprecated-workflow-runs
       - set-slack-notify
     uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-slack.yml@master
     with:

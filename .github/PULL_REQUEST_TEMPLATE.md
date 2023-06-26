@@ -31,6 +31,6 @@ output, screenshots help greatly.
 
 ## Closing issues
 
-<!-- Put `fixes #XXXX` in your comment to auto-close the issue that your PR
+<!-- Put `fixes #NNN` in your comment to auto-close the issue that your PR
 fixes (if such). -->
 Fixes #

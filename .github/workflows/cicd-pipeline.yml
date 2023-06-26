@@ -1,12 +1,5 @@
 name: CICD Pipeline
 
-#
-# This is a repository specific local workflow - only the template is auto-generated
-#
-
-#
-# Start of Template (part 1)
-#
 on:
   push:
     branches:
@@ -15,163 +8,66 @@ on:
     branches:
       - '**'
   workflow_dispatch:
+    inputs:
+      slack-notify:
+        description: 'Notify Slack'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 env:
-  SLACK_NOTIFY: true
+    SLACK_NOTIFY: true
 
-# Declare default permissions as read only.
 permissions: read-all
 
 jobs:
-#
-# End of Template (part 1)
-#
-  get-python-versions:
-    name: Get Python Versions
-    runs-on: ubuntu-latest
-    outputs:
-      version-matrix: ${{ steps.get-language-versions.outputs.latest-versions }}
-    steps:
-    - uses: ActionsToolbox/get-language-versions-action@12914a844dfb5bfa53884aaa1f736f961325f113  # v0.1.0
-      id: get-language-versions
-      with:
-        language: "python"
-
   bandit:
     name: Bandit
-    needs: get-python-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Run Bandit
-        env:
-          EXCLUDE_FILES: '\.md$'
-        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/bandit/master/pipeline.sh)
-
-  pydocstyle:
-    name: Pydocstyle
-    needs: get-python-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Run Pydocstyle
-        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pydocstyle/master/pipeline.sh)
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-bandit.yml@master
 
   pycodestyle:
     name: Pycodestyle
-    needs: get-python-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Run Pycodestyle
-        env:
-          EXCLUDE_FILES: '\.md$'
-        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pycodestyle/master/pipeline.sh)
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-pycodestyle.yml@master
+
+  pydocstyle:
+    name: Pydocstyle
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-pydocstyle.yml@master
 
   pylama:
     name: Pylama
-    needs: get-python-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Run Pylama
-        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylama/master/pipeline.sh)
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-pylama.yml@master
 
   pylint:
     name: Pylint
-    needs: get-python-versions
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Run Pylint
-        env:
-          EXCLUDE_FILES: '\.md$,setup.py'
-        run: bash <(curl -s https://raw.githubusercontent.com/CICDToolbox/pylint/master/pipeline.sh)
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-pylint.yml@master
 
-  pytest:
-    name: Pytest
-    needs: get-python-versions
+  set-slack-notify:
+    name: Set Slack Notify
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ${{ fromJson(needs.get-python-versions.outputs.version-matrix) }}
+    outputs:
+      slack-notify: ${{ steps.set-slack-notify.outputs.slack-notify }}
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-      - name: Set up Python ${{ matrix.python-versions }}
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # 4.5.0
-        with:
-          python-version: ${{ matrix.python-versions }}
-      - name: Install required packages
+      - name: Set Slack Notify
+        id: set-slack-notify
         run: |
-          pip install -r requirements.txt
-      - name: Run Pytest
-        run: |
-         pytest --no-header -vv
-
-#
-# Start of Template (part 2)
-#
+          echo "slack-notify=${{ github.event.inputs.slack-notify || env.SLACK_NOTIFY }}" >> "${GITHUB_OUTPUT}"
 
   slack-workflow-status:
-    if: always()
+    if: always() && ${{ github.actor != 'dependabot[bot]' }}
     name: Slack Post Workflow Notification
     needs:
       - bandit
-      - pydocstyle
       - pycodestyle
+      - pydocstyle
+      - pylama
       - pylint
-      - pytest
-    runs-on: ubuntu-latest
-    steps:
-      - name: Slack Workflow Notifications
-        if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
-        uses: Gamesight/slack-workflow-status@26a36836c887f260477432e4314ec3490a84f309 # v1.2.0
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          include_jobs: on-failure
-          include_commit_message: true
-#
-# End of Template (part 2)
-#
+      - set-slack-notify
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-slack.yml@master
+    with:
+      slack_notify: ${{ needs.set-slack-notify.outputs.slack-notify }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -9,13 +9,11 @@ you can elaborate further on details as appropriate for the situation.
 Notice that the summary and the elaboration is separated by a blank new
 line.
 """
+
 import sys
 
-from argparse import Namespace
-
-from modules.cli import process_command_line_arguments
-from modules.config import create_configuration_from_arguments
 from modules.exceptions import InvalidParameters
+from modules.main import run
 from modules.notify import error, system
 
 
@@ -24,8 +22,7 @@ def main() -> None:
 
     It does stuff.
     """
-    args: Namespace = process_command_line_arguments()
-    create_configuration_from_arguments(args)
+    run()
     sys.exit(0)
 
 

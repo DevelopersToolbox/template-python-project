@@ -82,11 +82,19 @@ def _add_optional_parameters(parser: ArgumentParser) -> None:
         description="stuff"
     )
     optional.add_argument(
-        "-o",
-        "--optional",
+        "-i",
+        "--optional-integer",
         type=int,
         default=2,
         help="An optional integer"
+    )
+
+    optional.add_argument(
+        "-s",
+        "--optional-string",
+        type=str,
+        default="me",
+        help="An optional string"
     )
 
 

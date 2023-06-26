@@ -1,6 +1,12 @@
-name: Stale issue/pr handler
+name: Repository Linting
 
 on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
   workflow_dispatch:
     inputs:
       slack-notify:
@@ -12,21 +18,27 @@ on:
           - 'true'
           - 'false'
 
-  schedule:
-    - cron: '55 3 * * *'
-
 env:
-  SLACK_NOTIFY: false
+  SLACK_NOTIFY: true
 
 permissions: read-all
 
 jobs:
-  handle-stale-entries:
-    name: Handle stale Issues & PRs (Local)
-    permissions:
-      issues: write
-      pull-requests: write
-    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-handle-stale.yml@master
+  action-lint:
+    name: Action Lint
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-action-lint.yml@master
+
+  awesomebot:
+    name: Awesomebot
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-awesomebot.yml@master
+
+  markdown-lint:
+    name: Markdown Lint
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-markdown-lint.yml@master
+
+  yaml-lint:
+    name: YAML Lint
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-yaml-lint.yml@master
 
   set-slack-notify:
     name: Set Slack Notify
@@ -41,9 +53,12 @@ jobs:
 
   slack-workflow-status:
     if: always()
-    name: Slack (Local)
+    name: Slack
     needs:
-      - handle-stale-entries
+      - action-lint
+      - awesomebot
+      - markdown-lint
+      - yaml-lint
       - set-slack-notify
     uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-slack.yml@master
     with:

@@ -7,85 +7,76 @@ on:
         description: 'Number of days.'
         required: true
         default: '30'
-      minimum_runs:
+      minimum-runs:
         description: 'The minimum runs to keep for each workflow.'
         required: true
         default: '6'
-      delete_workflow_pattern:
-        description: 'The name or filename of the workflow. if not set then it will target all workflows.'
-        required: false
-        default: "All"
-      delete_workflow_by_state_pattern:
-        description: 'Remove workflow by state: active, deleted, disabled_fork, disabled_inactivity, disabled_manually'
+      slack-notify:
+        description: 'Notify Slack'
         required: true
-        default: "All"
+        default: 'true'
         type: choice
         options:
-          - "All"
-          - active
-          - deleted
-          - disabled_inactivity
-          - disabled_manually
-      delete_run_by_conclusion_pattern:
-        description: 'Remove workflow by conclusion: action_required, cancelled, failure, skipped, success'
-        required: true
-        default: "All"
-        type: choice
-        options:
-          - "All"
-          - action_required
-          - cancelled
-          - failure
-          - skipped
-          - success
+          - 'true'
+          - 'false'
 
   schedule:
-    - cron: '48 4 * * *'
+    - cron: '30 4 * * *'
 
 env:
   SLACK_NOTIFY: false
+  DAYS: 30
+  MINIMUM_RUNS: 6
 
-# Declare default permissions as read only.
 permissions: read-all
 
 jobs:
-  delete-old-workflows:
-    name: Delete old workflow runs
+  set-output-defaults:
+    name: Set Output Defaults
     runs-on: ubuntu-latest
+    outputs:
+      days: ${{ steps.set-output-defaults.outputs.days }}
+      minimum-runs: ${{ steps.set-output-defaults.outputs.minimum-runs }}
+    steps:
+      - name: set outputs with default values
+        id: set-output-defaults
+        run: |
+          echo "days=${{ github.event.inputs.days || env.DAYS }}" >> "${GITHUB_OUTPUT}"
+          echo "minimum-runs=${{ github.event.inputs.minimum-runs || env.MINIMUM_RUNS }}" >> "${GITHUB_OUTPUT}"
+
+  delete-old-workflows:
+    name: Delete old workflow runs (Local)
     permissions:
       actions: write
+    needs:
+      - set-output-defaults
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-delete-old-runs.yml@master
+    with:
+      days: ${{ needs.set-output-defaults.outputs.days }}
+      minimum-runs: ${{ needs.set-output-defaults.outputs.minimum-runs }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  set-slack-notify:
+    name: Set Slack Notify
+    runs-on: ubuntu-latest
+    outputs:
+      slack-notify: ${{ steps.set-slack-notify.outputs.slack-notify }}
     steps:
-      - name: Set the variables
-        env:
-          DEFAULT_DAYS: 14
-          DEFAULT_MINIMUM_RUNS: 3
+      - name: Set Slack Notify
+        id: set-slack-notify
         run: |
-          echo "DAYS=${{ github.event.inputs.days || env.DEFAULT_DAYS }}" >> "${GITHUB_ENV}"
-          echo "MINIMUM_RUNS=${{ github.event.inputs.minimum_runs || env.DEFAULT_MINIMUM_RUNS }}" >> "${GITHUB_ENV}"
-      - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@c1a2f0de3fa4134a2357de83c92acff6e298bb8a # v2.0.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: ${{ env.DAYS }}
-          keep_minimum_runs: ${{ env.MINIMUM_RUNS }}
-          delete_workflow_pattern: ${{ github.event.inputs.delete_workflow_pattern }}
-          delete_workflow_by_state_pattern: ${{ github.event.inputs.delete_workflow_by_state_pattern }}
-          delete_run_by_conclusion_pattern: ${{ github.event.inputs.delete_run_by_conclusion_pattern }}
+          echo "slack-notify=${{ github.event.inputs.slack-notify || env.SLACK_NOTIFY }}" >> "${GITHUB_OUTPUT}"
 
   slack-workflow-status:
     if: always()
-    name: Slack Post Workflow Notification
+    name: Slack (Local)
     needs:
       - delete-old-workflows
-    runs-on: ubuntu-latest
-    steps:
-      - name: Slack Workflow Notifications
-        if: ${{ env.SLACK_NOTIFY == 'true' && github.event_name == 'push' }}
-        uses: Gamesight/slack-workflow-status@26a36836c887f260477432e4314ec3490a84f309 # v1.2.0
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          include_jobs: on-failure
-          include_commit_message: true
+      - set-slack-notify
+    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-slack.yml@master
+    with:
+      slack_notify: ${{ needs.set-slack-notify.outputs.slack-notify }}
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

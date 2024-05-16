@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -6,99 +5,12 @@ you can elaborate further on details as appropriate for the situation.
 Notice that the summary and the elaboration is separated by a blank new
 line.
 """
-from argparse import _ArgumentGroup, ArgumentDefaultsHelpFormatter, ArgumentParser, Namespace
+import argparse
 
-from .constants import ARG_PARSER_DESCRIPTION, ARG_PARSER_EPILOG
-
-
-def _add_flags_to_parser(parser: ArgumentParser) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        parser (ArgumentParser) -- _description_
-    """
-    flags: _ArgumentGroup = parser.add_argument_group(
-        title="optional flags",
-        description="Description"
-    )
-    flags.add_argument(
-        "-h",
-        "--help",
-        action="help",
-        help="show this help message and exit"
-    )
-    flags.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        default=False,
-        help="Very noisy"
-    )
-    flags.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Verbose output - show scan results as they come in"
-    )
+from .globals import ARG_PARSER_DESCRIPTION, ARG_PARSER_EPILOG, ARG_PARSER_PROG_NAME, VERSION_STRING
 
 
-def _add_required_parameters(parser: ArgumentParser) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        parser (ArgumentParser) -- _description_
-    """
-    required: _ArgumentGroup = parser.add_argument_group(
-        title="required arguments",
-        description="stuff"
-    )
-    required.add_argument(
-        "-r",
-        "--required",
-        type=str,
-        required=True,
-        help="A required parameter"
-    )
-
-
-def _add_optional_parameters(parser: ArgumentParser) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        parser (ArgumentParser) -- _description_
-
-    Returns:
-        _type_ -- _description_
-    """
-    optional: _ArgumentGroup = parser.add_argument_group(
-        title="optional arguments",
-        description="stuff"
-    )
-    optional.add_argument(
-        "-i",
-        "--optional-integer",
-        type=int,
-        default=2,
-        help="An optional integer"
-    )
-
-    optional.add_argument(
-        "-s",
-        "--optional-string",
-        type=str,
-        default="me",
-        help="An optional string"
-    )
-
-
-def _setup_arg_parser() -> ArgumentParser:
+def setup_arg_parser() -> argparse.ArgumentParser:
     """Define a summary.
 
     This is the extended summary from the template and needs to be replaced.
@@ -106,28 +18,35 @@ def _setup_arg_parser() -> ArgumentParser:
     Returns:
         ArgumentParser -- _description_
     """
-    parser: ArgumentParser = ArgumentParser(
-        add_help=False,
-        formatter_class=ArgumentDefaultsHelpFormatter,
-        description=ARG_PARSER_DESCRIPTION,
-        epilog=ARG_PARSER_EPILOG,
-    )
-    _add_flags_to_parser(parser)
-    _add_required_parameters(parser)
-    _add_optional_parameters(parser)
+    parser = argparse.ArgumentParser(prog=ARG_PARSER_PROG_NAME,
+                                     add_help=False,
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                     description=ARG_PARSER_DESCRIPTION,
+                                     epilog=ARG_PARSER_EPILOG)
+
+    flags: argparse._ArgumentGroup = parser.add_argument_group(title='flags')
+    optional: argparse._ArgumentGroup = parser.add_argument_group(title='optional')
+    required: argparse._ArgumentGroup = parser.add_argument_group(title='required')
+
+    flags.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS, help="show this help message and exit")
+    flags.add_argument("-d", "--debug", action="store_true", default=False, help="Very noisy")
+    flags.add_argument("-v", "--verbose", action="store_true", default=False, help="Verbose output - show scan results as they come in")
+    flags.add_argument('-V', '--version', action='version', version=VERSION_STRING, help="Show program's version number and exit.")
+
+    optional.add_argument("-i", "--optional-integer", type=int, default=2, help="An optional integer")
+    optional.add_argument("-s", "--optional-string", type=str, default="me", help="An optional string")
+
+    required.add_argument("-r", "--required", type=str, required=True, help="A required parameter")
 
     return parser
 
 
-def process_command_line_arguments() -> Namespace:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Returns:
-        Namespace -- _description_
+def process_arguments(parser: argparse.ArgumentParser) -> argparse.Namespace:
     """
-    parser: ArgumentParser = _setup_arg_parser()
-    args: Namespace = parser.parse_args()
+    Process the command line arguments.
+
+    Setup the arguments parser, parser the arguments, validate the input and then action the requested changed.
+    """
+    args: argparse.Namespace = parser.parse_args()
 
     return args

@@ -8,129 +8,54 @@ Notice that the summary and the elaboration is separated by a blank new
 line.
 """
 
-from .constants import ERROR, INFO, RESET, SUCCESS, SYSTEM, WARN
+from .constants import BOLD, ERROR, INFO, RESET, SUCCESS, SYSTEM, WARN
 
 
 def success(message: str) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
+    """
+    Display a success messages to the user.
 
     Arguments:
-        message (str) -- _description_
+        message (str): The message to display.
     """
-    print(f"{SUCCESS}{message}{RESET}")
-
-
-def success_msg(message: str) -> str:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        message (str) -- _description_
-
-    Returns:
-        str -- _description_
-    """
-    return f"{SUCCESS}{message}{RESET}"
+    print(f'[ {BOLD}{SUCCESS}Success{RESET} ] {message}')
 
 
 def warn(message: str) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
+    """
+    Display a warning messages to the user.
 
     Arguments:
-        message (str) -- _description_
+        message (str): The message to display.
     """
-    print(f"{WARN}{message}{RESET}")
-
-
-def warn_msg(message: str) -> str:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        message (str) -- _description_
-
-    Returns:
-        str -- _description_
-    """
-    return f"{WARN}{message}{RESET}"
+    print(f'[ {BOLD}{WARN}Warning{RESET} ] {message}')
 
 
 def error(message: str) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
+    """
+    Display an error messages to the user.
 
     Arguments:
-        message (str) -- _description_
+        message (str): The message to display.
     """
-    print(f"{ERROR}{message}{RESET}")
-
-
-def error_msg(message: str) -> str:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        message (str) -- _description_
-
-    Returns:
-        str -- _description_
-    """
-    return f"{ERROR}{message}{RESET}"
+    print(f'[ {BOLD}{ERROR}Error{RESET} ] {message}')
 
 
 def info(message: str) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
+    """
+    Display an informational messages to the user.
 
     Arguments:
-        message (str) -- _description_
+        message (str): The message to display.
     """
-    print(f"{INFO}{message}{RESET}")
-
-
-def info_msg(message: str) -> str:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        message (str) -- _description_
-
-    Returns:
-        str -- _description_
-    """
-    return f"{INFO}{message}{RESET}"
+    print(f'[ {BOLD}{INFO}Info{RESET} ] {message}')
 
 
 def system(message: str) -> None:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
+    """
+    Display a system messages to the user.
 
     Arguments:
-        message (str) -- _description_
+        message (str): The message to display.
     """
-    print(f"{SYSTEM}{message}{RESET}")
-
-
-def system_msg(message: str) -> str:
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        message (str) -- _description_
-
-    Returns:
-        str -- _description_
-    """
-    return f"{SYSTEM}{message}{RESET}"
+    print(f'{BOLD}{SYSTEM}{message}{RESET}')

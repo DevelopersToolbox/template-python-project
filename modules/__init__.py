@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,

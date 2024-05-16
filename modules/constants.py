@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -16,8 +14,6 @@ SUCCESS: str = colorama.Fore.GREEN
 WARN: str = colorama.Fore.YELLOW
 ERROR: str = colorama.Fore.RED
 INFO: str = colorama.Fore.CYAN
+BOLD: str = colorama.Style.BRIGHT
 SYSTEM: str = colorama.Fore.LIGHTBLACK_EX
 RESET: str = colorama.Style.RESET_ALL
-
-ARG_PARSER_DESCRIPTION: str = "A description goes here"
-ARG_PARSER_EPILOG: str = "The Epilog goes here"

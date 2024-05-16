@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -8,6 +6,10 @@ Notice that the summary and the elaboration is separated by a blank new
 line.
 """
 
-from types import SimpleNamespace
+VERSION: str = '0.0.1'
 
-global_configuration: SimpleNamespace = SimpleNamespace()
+ARG_PARSER_PROG_NAME: str = "baseline-project"
+ARG_PARSER_DESCRIPTION: str = "A description goes here"
+ARG_PARSER_EPILOG: str = "The Epilog goes here"
+
+VERSION_STRING: str = "Current version of " + ARG_PARSER_PROG_NAME + " is v" + VERSION

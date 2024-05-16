@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -8,9 +6,12 @@ Notice that the summary and the elaboration is separated by a blank new
 line.
 """
 
-from argparse import Namespace
+import argparse
+import sys
 
-from modules.cli import process_command_line_arguments
+from types import SimpleNamespace
+
+from modules.cli import setup_arg_parser, process_arguments
 from modules.config import create_configuration_from_arguments
 
 
@@ -22,6 +23,14 @@ def run() -> None:
     Arguments:
         message (str) -- _description_
     """
-    args: Namespace = process_command_line_arguments()
-    print(args)
-    create_configuration_from_arguments(args)
+    parser: argparse.ArgumentParser = setup_arg_parser()
+    try:
+        args: argparse.Namespace = process_arguments(parser)
+    except argparse.ArgumentTypeError as err:
+        parser.print_usage()
+        print(err)
+        sys.exit(1)
+    else:
+        config: SimpleNamespace = create_configuration_from_arguments(args)
+        print(f"Args: {args}")
+        print(f"Config: {config}")

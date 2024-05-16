@@ -12,7 +12,6 @@ line.
 
 import sys
 
-from modules.exceptions import InvalidParameters
 from modules.main import run
 from modules.notify import error, system
 
@@ -22,14 +21,12 @@ def main() -> None:
 
     It does stuff.
     """
-    run()
-    sys.exit(0)
+    try:
+        run()
+    except KeyboardInterrupt:
+        system("\n[*] Exiting Program\n")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        system("\n[*] Exiting Program\n")
-    except InvalidParameters as e:
-        error(str(e))
+    main()

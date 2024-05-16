@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -8,10 +7,10 @@ line.
 """
 from argparse import Namespace
 
-from .globals import global_configuration
+from types import SimpleNamespace
 
 
-def create_configuration_from_arguments(args: Namespace) -> None:
+def create_configuration_from_arguments(args: Namespace) -> SimpleNamespace:
     """Define a summary.
 
     This is the extended summary from the template and needs to be replaced.
@@ -19,8 +18,12 @@ def create_configuration_from_arguments(args: Namespace) -> None:
     Arguments:
         args (argparse.Namespace) -- _description_
     """
-    global_configuration.verbose = args.verbose
-    global_configuration.debug = args.debug
-    global_configuration.required = args.required
-    global_configuration.optional_integer = args.optional_integer
-    global_configuration.optional_string = args.optional_string
+    config: SimpleNamespace = SimpleNamespace()
+
+    config.verbose = args.verbose
+    config.debug = args.debug
+    config.required = args.required
+    config.optional_integer = args.optional_integer
+    config.optional_string = args.optional_string
+
+    return config

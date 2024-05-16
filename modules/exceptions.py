@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """This is the summary line.
 
 This is the further elaboration of the docstring. Within this section,
@@ -15,14 +14,4 @@ class CustomException(Exception):
 
     Arguments:
         Exception (_type_) -- _description_
-    """
-
-
-class InvalidParameters(CustomException):
-    """Define a summary.
-
-    This is the extended summary from the template and needs to be replaced.
-
-    Arguments:
-        CustomException (_type_) -- _description_
     """

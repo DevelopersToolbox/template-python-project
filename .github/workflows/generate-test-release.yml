@@ -1,10 +1,9 @@
-name: Generate a Release
+name: Generate a TEST Release
 
 on:
   push:
     tags:
-      - 'v[0-9].[0-9]+.[0-9]+'
-      - '!v[0-9].[0-9]+.[0-9]+rc[0-9]+'
+      - 'v[0-9].[0-9]+.[0-9]+rc[0-9]+'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,18 +19,20 @@ jobs:
       release-version: ${{ steps.set-release-version.outputs.release-version }}
 
     steps:
-      - name: Checkout the Repository
+      - name: Checkout the repository
+        # Using a specific SHA for the checkout action ensures the action version is stable and secure.
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
         with:
           fetch-depth: 0
 
-      - name: Set the Release Version
+      - name: Set the release version
         id: set-release-version
         run: |
+          # This script extracts the tag name from the GITHUB_REF and sets it as an output.
           echo "release-version=${GITHUB_REF#refs/*/}" >> "${GITHUB_OUTPUT}"
 
   create-release:
-    name: Create a Release
+    name: Create Release
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -59,7 +60,7 @@ jobs:
           name: ${{ needs.set-release-version.outputs.release-version }}
           body: ${{ steps.Changelog.outputs.changelog }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Create Release Summary
         run: echo ${{ steps.Changelog.outputs.changelog }} >> "${GITHUB_STEP_SUMMARY}"

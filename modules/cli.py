@@ -7,7 +7,7 @@ line.
 """
 import argparse
 
-from .globals import ARG_PARSER_DESCRIPTION, ARG_PARSER_EPILOG, ARG_PARSER_PROG_NAME, VERSION_STRING
+from modules.globals import ARG_PARSER_DESCRIPTION, ARG_PARSER_EPILOG, ARG_PARSER_PROG_NAME, VERSION_STRING
 
 
 def setup_arg_parser() -> argparse.ArgumentParser:
@@ -50,3 +50,24 @@ def process_arguments(parser: argparse.ArgumentParser) -> argparse.Namespace:
     args: argparse.Namespace = parser.parse_args()
 
     return args
+
+
+def run() -> None:
+    """Define a summary.
+
+    This is the extended summary from the template and needs to be replaced.
+
+    Arguments:
+        message (str) -- _description_
+    """
+    parser: argparse.ArgumentParser = setup_arg_parser()
+    try:
+        args: argparse.Namespace = process_arguments(parser)
+    except argparse.ArgumentTypeError as err:
+        parser.print_usage()
+        print(err)
+        sys.exit(1)
+    else:
+        config: SimpleNamespace = create_configuration_from_arguments(args)
+        print(f"Args: {args}")
+        print(f"Config: {config}")

@@ -1,54 +1,47 @@
-name: Purge obsolete workflow runs
+name: Purge deprecated workflow runs
 
 on:
   workflow_dispatch:
-    inputs:
-      slack-notify:
-        description: 'Notify Slack'
-        required: true
-        default: 'true'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
 
   schedule:
-    - cron: '4 3 * * 1'
+    - cron: '46 5 * * 1'
 
-env:
-  SLACK_NOTIFY: false
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions: read-all
 
 jobs:
-  purge-deprecated-workflow-runs:
-    name: Purge deprecated workflow runs (Local)
+  purge-obsolete-workflows:
+    name: Purge Deprecated Workflow Runs
     permissions:
       actions: write
-    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-purge-deprecated-workflow-runs.yml@master
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
-
-  set-slack-notify:
-    name: Set Slack Notify
     runs-on: ubuntu-latest
-    outputs:
-      slack-notify: ${{ steps.set-slack-notify.outputs.slack-notify }}
+
     steps:
-      - name: Set Slack Notify
-        id: set-slack-notify
-        run: |
-          echo "slack-notify=${{ github.event.inputs.slack-notify || env.SLACK_NOTIFY }}" >> "${GITHUB_OUTPUT}"
+      - name: Purge Deprecated Workflow Runs
+        uses: otto-de/purge-deprecated-workflow-runs@31a4e821d43e9a354cbd65845922c76e4b4b3633 # v 2.0.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          remove-obsolete: true
+          remove-cancelled: true
+          remove-failed: true
+          remove-skipped: true
 
   slack-workflow-status:
     if: always()
-    name: Slack (Local)
+    name: Slack Post Workflow Notification
     needs:
-      - purge-deprecated-workflow-runs
-      - set-slack-notify
-    uses: WolfSoftware/reusable-workflows/.github/workflows/reusable-slack.yml@master
-    with:
-      slack_notify: ${{ needs.set-slack-notify.outputs.slack-notify }}
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - purge-obsolete-workflows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Slack Workflow Notifications
+        if: ${{ github.event_name == 'schedule' && needs.purge-obsolete-workflows.result != 'success'}}
+        uses: Gamesight/slack-workflow-status@68bf00d0dbdbcb206c278399aa1ef6c14f74347a # v1.3.0
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          include_jobs: on-failure
+          include_commit_message: true

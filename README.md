@@ -1,7 +1,7 @@
 <!-- markdownlint-disable -->
 <p align="center">
     <a href="https://github.com/DevelopersToolbox/">
-        <img src="https://cdn.wolfsoftware.com/assets/images/github/organisations/greyteamtoolbox/black-and-white-circle-256.png" alt="GreyTeamToolbox logo" />
+        <img src="https://cdn.wolfsoftware.com/assets/images/github/organisations/developerstoolbox/black-and-white-circle-256.png" alt="GreyTeamToolbox logo" />
     </a>
     <br />
     <a href="https://github.com/DevelopersToolbox/template-project/actions/workflows/cicd.yml">

@@ -1,1 +1,1 @@
-wolfsoftware.notify==0.1.0
+wolfsoftware.notify==0.1.2
